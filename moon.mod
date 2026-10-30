@@ -11,4 +11,5 @@ import {
   "coke089/moon-sdp@0.1.0",
   "gmlewis/md5@0.20.2",
   "moonbitlang/async@0.22.4",
+  "moonbit-community/rtc@0.0.1",
 }
