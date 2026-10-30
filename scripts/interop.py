@@ -125,6 +125,16 @@ paths:
                         assert publisher.returncode == 0
                         assert "published packets=300" in (directory / "publisher.log").read_text(encoding="utf-8")
                         results.append({"authentication": scheme, "publication": publication, "tracks": 2, "playback": ["tcp", "udp"], "pause_resume_keepalive_teardown": True, "wrong_credentials_rejected": True})
+                except Exception as error:
+                    print("interop failure:", scheme, publication, flush=True)
+                    if isinstance(error, subprocess.CalledProcessError):
+                        print("client stdout:", error.stdout, flush=True)
+                        print("client stderr:", error.stderr, flush=True)
+                    for name in ["server.log", "publisher.log"]:
+                        log_path = directory / name
+                        if log_path.exists():
+                            print(name + ":\n" + log_path.read_text(encoding="utf-8", errors="replace"), flush=True)
+                    raise
                 finally:
                     stop(publisher)
                     stop(server)
