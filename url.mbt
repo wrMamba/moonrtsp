@@ -52,9 +52,10 @@ pub fn resolve_control(base : String, control : String) -> String raise RtspErro
  }
  let path = endpoint.path.split("?").to_array()[0].to_owned()
  let parts = path.split("/").to_array().map(x => x.to_owned())
- if !path.has_suffix("/") { ignore(parts.pop()) }
+ ignore(parts.pop())
  for segment in control.split("/") {
   match segment { ".." => { if parts.length() > 1 { ignore(parts.pop()) } }; "." => (); _ => parts.push(segment.to_owned()) }
  }
  Endpoint::{ host: endpoint.host, port: endpoint.port, path: parts.join("/") }.url()
 }
+
