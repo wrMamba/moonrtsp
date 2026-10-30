@@ -28,6 +28,7 @@ jobs:
           node --version
       - name: Interfaces and format
         run: |
+          moon update
           moon info
           moon fmt --check
           git diff --exit-code
