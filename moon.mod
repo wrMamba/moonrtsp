@@ -1,10 +1,17 @@
 name = "wrMamba/moonrtsp"
+
 version = "0.1.0"
+
 readme = "README.md"
+
 repository = "https://github.com/wrMamba/moonrtsp"
+
 license = "MIT"
+
 description = "RTSP 1.0 sessions, authenticated media playback and publishing"
-keywords = ["rtsp", "streaming", "camera", "rtp"]
+
+keywords = [ "rtsp", "streaming", "camera", "rtp" ]
+
 preferred_target = "wasm-gc"
 
 import {

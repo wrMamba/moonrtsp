@@ -1,8 +1,9 @@
 import {
- "wrMamba/moonrtsp" @rtsp,
- "moonbitlang/async",
- "moonbitlang/async/socket",
- "moonbitlang/core/encoding/utf8",
- "moonbit-community/rtc/rtp" @rtp,
+  "wrMamba/moonrtsp" @rtsp,
+  "moonbitlang/async",
+  "moonbitlang/async/socket",
+  "moonbitlang/core/encoding/utf8",
+  "moonbit-community/rtc/rtp",
 }
+
 supported_targets = "native+wasm"

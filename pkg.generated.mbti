@@ -1,0 +1,248 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "wrMamba/moonrtsp"
+
+import {
+  "moonbit-community/rtc/rtcp",
+  "moonbit-community/rtc/rtp",
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn decode_media(Int, Bool, Bytes) -> MediaEvent raise RtspError
+
+pub fn describe(Bytes, String) -> Description raise RtspError
+
+pub fn interleave(Int, Bytes) -> Bytes raise RtspError
+
+pub fn negotiate(String, Transport) -> Negotiated raise RtspError
+
+pub fn parse_count(String, Int) -> Int raise RtspError
+
+pub fn parse_parameters(String) -> Map[String, String] raise RtspError
+
+pub fn parse_public(Headers) -> Array[String] raise RtspError
+
+pub fn parse_rtp_info(String, String) -> Array[RtpInfo] raise RtspError
+
+pub fn parse_session(String) -> SessionInfo raise RtspError
+
+pub fn resolve_control(String, String) -> String raise RtspError
+
+// Errors
+pub(all) suberror RtspError {
+  Invalid(String)
+  Limit(String)
+  State(String)
+  Remote(Int)
+  Closed
+} derive(@debug.Debug)
+pub fn RtspError::to_repr(Self) -> @debug.Repr
+
+// Types and methods
+pub struct Authenticator {
+  // private fields
+}
+pub fn Authenticator::authorization(Self, String, String) -> String raise RtspError
+pub fn Authenticator::challenge(Self, String) -> Unit raise RtspError
+pub fn Authenticator::new(Credentials, String) -> Self raise RtspError
+
+pub struct ChannelMap {
+  // private fields
+}
+pub fn ChannelMap::bind(Self, Int, Transport) -> Unit raise RtspError
+pub fn ChannelMap::new() -> Self
+pub fn ChannelMap::route(Self, Int, Bytes) -> MediaEvent raise RtspError
+
+pub struct Clock {
+  // private fields
+}
+pub fn Clock::millis(Self, UInt) -> Int64
+pub fn Clock::new(Int) -> Self raise RtspError
+
+pub struct Credentials {
+  // private fields
+}
+pub fn Credentials::new(String, String) -> Self raise RtspError
+
+pub struct Decoder {
+  // private fields
+}
+pub fn Decoder::feed(Self, Bytes) -> Array[WireEvent] raise RtspError
+pub fn Decoder::finish(Self) -> Unit raise RtspError
+pub fn Decoder::new(max_buffer? : Int) -> Self raise RtspError
+pub fn Decoder::pending(Self) -> Int
+pub fn Decoder::reset(Self) -> Unit
+
+pub struct Description {
+  aggregate : String
+  tracks : Array[Track]
+  raw : String
+}
+pub fn Description::select(Self, Array[Int]) -> Array[Track] raise RtspError
+
+pub struct Endpoint {
+  host : String
+  port : Int
+  path : String
+}
+pub fn Endpoint::hostname(Self) -> String
+pub fn Endpoint::parse(String) -> Self raise RtspError
+pub fn Endpoint::url(Self) -> String
+
+pub struct Frame {
+  timestamp : UInt
+  data : Bytes
+  packets : Int
+}
+
+pub struct FrameAssembler {
+  // private fields
+}
+pub fn FrameAssembler::new(@rtp.PayloadCodec, max_bytes? : Int, max_packets? : Int) -> Self raise RtspError
+pub fn FrameAssembler::push(Self, @rtp.Packet) -> Frame? raise RtspError
+pub fn FrameAssembler::reset(Self) -> Unit
+
+pub struct Headers {
+  // private fields
+}
+pub fn Headers::add(Self, String, String) -> Unit raise RtspError
+pub fn Headers::all(Self, String) -> Array[String]
+pub fn Headers::copy(Self) -> Self
+pub fn Headers::get(Self, String) -> String?
+pub fn Headers::items(Self) -> Array[(String, String)]
+pub fn Headers::new() -> Self
+pub fn Headers::set(Self, String, String) -> Unit raise RtspError
+
+pub(all) enum MediaEvent {
+  Rtp(Int, @rtp.Packet)
+  Rtcp(Int, Array[@rtcp.Packet])
+}
+
+pub struct MediaQueue {
+  // private fields
+}
+pub fn MediaQueue::discarded(Self) -> Int64
+pub fn MediaQueue::length(Self) -> Int
+pub fn MediaQueue::new(capacity? : Int) -> Self raise RtspError
+pub fn MediaQueue::pop(Self) -> MediaEvent?
+pub fn MediaQueue::push(Self, MediaEvent) -> Unit
+
+pub struct Negotiated {
+  transport : Transport
+  server_ports : (Int, Int)?
+  source : String?
+  ssrc : String?
+}
+
+pub(all) enum Phase {
+  Connected
+  Described
+  Announced
+  Ready
+  Playing
+  Recording
+  Paused
+  Ended
+} derive(Eq, @debug.Debug)
+pub fn Phase::equal(Self, Self) -> Bool
+pub fn Phase::not_equal(Self, Self) -> Bool
+pub fn Phase::to_repr(Self) -> @debug.Repr
+
+pub(all) enum PlayRange {
+  Live
+  FromMillis(Int64)
+  Interval(Int64, Int64)
+}
+pub fn PlayRange::encode(Self) -> String raise RtspError
+
+pub struct ReconnectPolicy {
+  attempts : Int
+  initial_ms : Int
+  maximum_ms : Int
+}
+pub fn ReconnectPolicy::delay(Self, Int) -> Int raise RtspError
+pub fn ReconnectPolicy::new(attempts? : Int, initial_ms? : Int, maximum_ms? : Int) -> Self raise RtspError
+
+pub struct Request {
+  verb : String
+  uri : String
+  headers : Headers
+  body : Bytes
+}
+pub fn Request::cseq(Self) -> Int raise RtspError
+pub fn Request::encode(Self) -> Bytes raise RtspError
+pub fn Request::new(String, String, Int, body? : Bytes) -> Self raise RtspError
+
+pub struct Response {
+  status : Int
+  reason : String
+  headers : Headers
+  body : Bytes
+}
+pub fn Response::cseq(Self) -> Int raise RtspError
+pub fn Response::encode(Self) -> Bytes raise RtspError
+pub fn Response::new(Int, String, Headers, body? : Bytes) -> Self raise RtspError
+
+pub struct RtpInfo {
+  url : String
+  sequence : Int?
+  timestamp : UInt?
+}
+
+pub struct Session {
+  // private fields
+}
+pub fn Session::accept(Self, Response, now? : Int64) -> Request? raise RtspError
+pub fn Session::check_deadline(Self, Int64) -> Unit raise RtspError
+pub fn Session::close(Self) -> Unit
+pub fn Session::info(Self) -> SessionInfo?
+pub fn Session::keepalive_due(Self, Int64) -> Bool
+pub fn Session::new(String, auth? : Authenticator) -> Self raise RtspError
+pub fn Session::phase(Self) -> Phase
+pub fn Session::request(Self, String, uri? : String, body? : Bytes, headers? : Headers, now? : Int64, timeout_ms? : Int) -> Request raise RtspError
+pub fn Session::setup_count(Self) -> Int
+
+pub struct SessionInfo {
+  id : String
+  timeout_seconds : Int
+}
+
+pub struct StatsSnapshot {
+  packets : Int64
+  octets : Int64
+  forward_gaps : Int64
+  late_or_duplicate : Int64
+  source_changes : Int64
+}
+
+pub struct Track {
+  index : Int
+  kind : String
+  control : String
+  formats : Array[String]
+  rtpmap : Array[String]
+  fmtp : Array[String]
+}
+
+pub struct TrackStats {
+  // private fields
+}
+pub fn TrackStats::new() -> Self
+pub fn TrackStats::observe(Self, @rtp.Packet) -> Unit
+pub fn TrackStats::snapshot(Self) -> StatsSnapshot
+
+pub(all) enum Transport {
+  Tcp(Int, Int)
+  Udp(Int, Int)
+}
+pub fn Transport::encode(Self, record? : Bool) -> String raise RtspError
+
+pub(all) enum WireEvent {
+  Reply(Response)
+  Command(Request)
+  Interleaved(Int, Bytes)
+}
+
+// Type aliases
+
+// Traits

@@ -1,9 +1,9 @@
 import {
- "moonbit-community/rtc/rtp" @rtp,
- "moonbit-community/rtc/rtcp" @rtcp,
- "moonbitlang/core/debug",
- "moonbitlang/core/encoding/utf8",
- "moonbitlang/core/encoding/base64",
- "gmlewis/md5",
- "coke089/moon-sdp" @sdp,
+  "moonbit-community/rtc/rtp",
+  "moonbit-community/rtc/rtcp",
+  "moonbitlang/core/debug",
+  "moonbitlang/core/encoding/utf8",
+  "moonbitlang/core/encoding/base64",
+  "gmlewis/md5",
+  "coke089/moon-sdp" @sdp,
 }
