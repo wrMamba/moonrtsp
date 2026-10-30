@@ -1,0 +1,6 @@
+_build/
+.mooncakes/
+.env
+credentials.json
+__pycache__/
+*.zip
