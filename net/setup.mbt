@@ -9,7 +9,12 @@ pub async fn Client::describe(self : Client) -> @rtsp.Description {
   h.add("Accept", "application/sdp")
   let response = self.request("DESCRIBE", headers=h)
   errdefer self.close()
-  if !response.headers.get("Content-Type").unwrap_or("").has_prefix("application/sdp") {raise @rtsp.Invalid("DESCRIBE Content-Type")}
+  if !response.headers
+    .get("Content-Type")
+    .unwrap_or("")
+    .has_prefix("application/sdp") {
+    raise @rtsp.Invalid("DESCRIBE Content-Type")
+  }
   let base = response.headers.get("Content-Base").unwrap_or(self.endpoint.url())
   let description = @rtsp.describe(response.body, base)
   self.description = Some(description)
@@ -18,7 +23,14 @@ pub async fn Client::describe(self : Client) -> @rtsp.Description {
 
 ///|
 pub async fn Client::announce(self : Client, sdp : String) -> @rtsp.Description {
-  let description = @rtsp.describe(@utf8.encode(sdp), self.endpoint.url() + "/")
+  let description = @rtsp.describe(
+    @utf8.encode(sdp),
+    if self.endpoint.url().has_suffix("/") {
+      self.endpoint.url()
+    } else {
+      self.endpoint.url() + "/"
+    },
+  )
   let h = @rtsp.Headers::new()
   h.add("Content-Type", "application/sdp")
   ignore(self.request("ANNOUNCE", body=@utf8.encode(sdp), headers=h))

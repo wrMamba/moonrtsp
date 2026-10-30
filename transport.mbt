@@ -45,6 +45,7 @@ pub fn negotiate(
   value : String,
   requested : Transport,
 ) -> Negotiated raise RtspError {
+  ignore(requested.encode())
   require(
     value.length() <= 8192 && !value.contains(","),
     "single transport response",
@@ -90,7 +91,10 @@ pub fn negotiate(
     None => None
   }
   if requested is Udp(_, _) {
-    require(server_ports is Some(_), "missing server ports")
+    match server_ports {
+      Some((a, _)) => require(a > 0, "server UDP port must be positive")
+      None => raise Invalid("missing server ports")
+    }
   }
   {
     transport: requested,

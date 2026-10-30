@@ -1,0 +1,41 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "wrMamba/moonrtsp/net"
+
+import {
+  "moonbit-community/rtc/rtp",
+  "wrMamba/moonrtsp",
+}
+
+// Values
+pub async fn follow(String, Array[Int], @moonrtsp.ReconnectPolicy, async (Client) -> Unit, udp? : Bool, credentials? : @moonrtsp.Credentials, cnonce? : String) -> Unit
+
+// Errors
+
+// Types and methods
+pub struct Client {
+  // private fields
+}
+pub async fn Client::announce(Self, String) -> @moonrtsp.Description
+pub fn Client::close(Self) -> Unit
+pub async fn Client::connect(String, credentials? : @moonrtsp.Credentials, cnonce? : String, timeout_ms? : Int) -> Self
+pub async fn Client::describe(Self) -> @moonrtsp.Description
+pub fn Client::discarded(Self) -> Int64
+pub async fn Client::keepalive(Self, use_options? : Bool) -> Unit
+pub fn Client::keepalive_due(Self) -> Bool
+pub async fn Client::options(Self) -> Array[String]
+pub async fn Client::pause(Self) -> Unit
+pub fn Client::phase(Self) -> @moonrtsp.Phase
+pub async fn Client::play(Self, range? : @moonrtsp.PlayRange) -> Array[@moonrtsp.RtpInfo]
+pub async fn Client::receive(Self) -> @moonrtsp.MediaEvent
+pub async fn Client::receive_udp(Self, Int, control? : Bool) -> @moonrtsp.MediaEvent
+pub async fn Client::record(Self) -> Unit
+pub async fn Client::request(Self, String, uri? : String, body? : Bytes, headers? : @moonrtsp.Headers) -> @moonrtsp.Response
+pub async fn Client::send(Self, Int, Bytes, control? : Bool) -> Unit
+pub async fn Client::send_packet(Self, Int, @rtp.Packet) -> Unit
+pub async fn Client::setup(Self, Int, udp? : Bool, record? : Bool) -> @moonrtsp.Negotiated
+pub fn Client::statistics(Self, Int) -> @moonrtsp.StatsSnapshot raise @moonrtsp.RtspError
+pub async fn Client::teardown(Self) -> Unit
+
+// Type aliases
+
+// Traits

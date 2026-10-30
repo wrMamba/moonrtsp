@@ -12,7 +12,7 @@ description = "RTSP 1.0 sessions, authenticated media playback and publishing"
 
 keywords = [ "rtsp", "streaming", "camera", "rtp" ]
 
-preferred_target = "wasm-gc"
+preferred_target = "wasm"
 
 import {
   "coke089/moon-sdp@0.1.0",

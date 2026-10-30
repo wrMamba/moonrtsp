@@ -145,3 +145,18 @@ fn expect_error(f : () -> Unit raise) -> Unit raise {
     _ => fail("expected error")
   }
 }
+
+///|
+test "UDP server ports and requested transport validated before negotiation" {
+  expect_error(() => {
+    ignore(negotiate("RTP/AVP;unicast;server_port=0-1", Udp(5000, 5001)))
+  })
+  expect_error(() => {
+    ignore(negotiate("RTP/AVP/TCP;unicast;interleaved=0-2", Tcp(0, 2)))
+  })
+  let result = negotiate(
+    "RTP/AVP;unicast;server_port=5000-5001",
+    Udp(6000, 6001),
+  )
+  assert_eq(result.server_ports, Some((5000, 5001)))
+}

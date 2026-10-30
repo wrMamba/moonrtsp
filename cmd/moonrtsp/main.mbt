@@ -21,7 +21,7 @@ async fn main {
   let args = @env.args()
   if args.length() < 3 {
     println(
-      "usage: moonrtsp inspect|play|publish|follow rtsp://host/path [tcp|udp] [packet-count]",
+      "usage: moonrtsp inspect|play|publish|publish-multi|follow rtsp://host/path [tcp|udp] [packet-count]",
     )
     return
   }
@@ -69,11 +69,15 @@ async fn main {
   defer client.close()
   if mode == "publish" || mode == "publish-multi" {
     let mut sdp = "v=0\r\no=- 0 0 IN IP4 127.0.0.1\r\ns=MoonRTSP synthetic G711\r\nt=0 0\r\na=control:*\r\nm=audio 0 RTP/AVP 0\r\na=rtpmap:0 PCMU/8000\r\na=control:trackID=0\r\n"
-    if mode == "publish-multi" { sdp += "m=audio 0 RTP/AVP 8\r\na=rtpmap:8 PCMA/8000\r\na=control:trackID=1\r\n" }
-  ignore(client.announce(sdp))
+    if mode == "publish-multi" {
+      sdp += "m=audio 0 RTP/AVP 8\r\na=rtpmap:8 PCMA/8000\r\na=control:trackID=1\r\n"
+    }
+    ignore(client.announce(sdp))
     ignore(client.setup(0, udp~, record=true))
-    if mode == "publish-multi" {ignore(client.setup(1, udp~, record=true))}
-  client.record()
+    if mode == "publish-multi" {
+      ignore(client.setup(1, udp~, record=true))
+    }
+    client.record()
     println("recording")
     for i = 0; i < count; i = i + 1 {
       let packet = @rtp.Packet::new(
@@ -85,10 +89,17 @@ async fn main {
         payload=Bytes::make(160, b'\xff'),
       )
       client.send_packet(0, packet)
-    if mode == "publish-multi" {
-      let other=@rtp.Packet::new(payload_type=b'\x08',sequence_number=(i%65536).to_uint16(),timestamp=i.reinterpret_as_uint()*160U,ssrc=654321U,marker=i==0,payload=Bytes::make(160,b'\xd5'))
-      client.send_packet(1,other)
-    }
+      if mode == "publish-multi" {
+        let other = @rtp.Packet::new(
+          payload_type=b'\x08',
+          sequence_number=(i % 65536).to_uint16(),
+          timestamp=i.reinterpret_as_uint() * 160U,
+          ssrc=654321U,
+          marker=i == 0,
+          payload=Bytes::make(160, b'\xd5'),
+        )
+        client.send_packet(1, other)
+      }
       @async.sleep(20)
     }
     client.teardown()
