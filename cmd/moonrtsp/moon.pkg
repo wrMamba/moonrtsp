@@ -1,0 +1,11 @@
+import {
+  "wrMamba/moonrtsp" @rtsp,
+  "wrMamba/moonrtsp/net",
+  "moonbitlang/core/env",
+  "moonbitlang/async",
+  "moonbit-community/rtc/rtp",
+}
+
+supported_targets = "native+wasm"
+
+pkgtype(kind: "executable")
