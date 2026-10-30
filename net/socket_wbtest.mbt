@@ -70,13 +70,13 @@ async test "transaction timeout closes resources" {
       let (conn, _) = server.accept()
       defer conn.close()
       ignore(command(conn, @rtsp.Decoder::new()))
-      @async.sleep(1000)
+      @async.sleep(2000)
     })
     let client = Client::connect(
       "rtsp://127.0.0.1:" + server.addr.port().to_string() + "/test",
+      timeout_ms=500,
     )
     defer client.close()
-    client.timeout_ms = 50
     try client.options() catch {
       _ => ()
     } noraise {

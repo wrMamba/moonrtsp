@@ -105,7 +105,8 @@ pub fn Session::request(
     "PLAY" =>
       require(
         (self.phase == Ready || self.phase == Paused) &&
-        self.setup_uris.length() > 0 && !self.publishing,
+        self.setup_uris.length() > 0 &&
+        !self.publishing,
         "PLAY phase",
       )
     "RECORD" =>
@@ -212,7 +213,10 @@ pub fn Session::accept(
   }
   match request.verb {
     "DESCRIBE" => self.phase = Described
-    "ANNOUNCE" => { self.phase = Announced; self.publishing = true }
+    "ANNOUNCE" => {
+      self.phase = Announced
+      self.publishing = true
+    }
     "SETUP" => {
       require(self.info is Some(_), "SETUP missing Session")
       if !self.setup_uris.contains(request.uri) {
