@@ -17,7 +17,7 @@
 
 ## 环境与安装
 
-安装官方 MoonBit 工具链，执行 `moon version --all`。开发验证使用 moonc 0.10.15；网络包使用 `moonbitlang/async` 0.22.4。
+安装官方 MoonBit 工具链，执行 `moon version --all`。开发验证使用 moonc 0.10.18；网络包使用 `moonbitlang/async` 0.22.4。
 
 ```sh
 moon new camera-client

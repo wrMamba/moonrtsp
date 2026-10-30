@@ -7,7 +7,7 @@ import {
 }
 
 // Values
-pub async fn follow(String, Array[Int], @moonrtsp.ReconnectPolicy, async (Client) -> Unit, udp? : Bool, credentials? : @moonrtsp.Credentials, cnonce? : String) -> Unit
+pub async fn follow(String, Array[Int32], @moonrtsp.ReconnectPolicy, async (Client) -> Unit, udp? : Bool, credentials? : @moonrtsp.Credentials, cnonce? : String) -> Unit
 
 // Errors
 
@@ -17,7 +17,7 @@ pub struct Client {
 }
 pub async fn Client::announce(Self, String) -> @moonrtsp.Description
 pub fn Client::close(Self) -> Unit
-pub async fn Client::connect(String, credentials? : @moonrtsp.Credentials, cnonce? : String, timeout_ms? : Int) -> Self
+pub async fn Client::connect(String, credentials? : @moonrtsp.Credentials, cnonce? : String, timeout_ms? : Int32) -> Self
 pub async fn Client::describe(Self) -> @moonrtsp.Description
 pub fn Client::discarded(Self) -> Int64
 pub async fn Client::keepalive(Self, use_options? : Bool) -> Unit
@@ -27,13 +27,13 @@ pub async fn Client::pause(Self) -> Unit
 pub fn Client::phase(Self) -> @moonrtsp.Phase
 pub async fn Client::play(Self, range? : @moonrtsp.PlayRange) -> Array[@moonrtsp.RtpInfo]
 pub async fn Client::receive(Self) -> @moonrtsp.MediaEvent
-pub async fn Client::receive_udp(Self, Int, control? : Bool) -> @moonrtsp.MediaEvent
+pub async fn Client::receive_udp(Self, Int32, control? : Bool) -> @moonrtsp.MediaEvent
 pub async fn Client::record(Self) -> Unit
 pub async fn Client::request(Self, String, uri? : String, body? : Bytes, headers? : @moonrtsp.Headers) -> @moonrtsp.Response
-pub async fn Client::send(Self, Int, Bytes, control? : Bool) -> Unit
-pub async fn Client::send_packet(Self, Int, @rtp.Packet) -> Unit
-pub async fn Client::setup(Self, Int, udp? : Bool, record? : Bool) -> @moonrtsp.Negotiated
-pub fn Client::statistics(Self, Int) -> @moonrtsp.StatsSnapshot raise @moonrtsp.RtspError
+pub async fn Client::send(Self, Int32, Bytes, control? : Bool) -> Unit
+pub async fn Client::send_packet(Self, Int32, @rtp.Packet) -> Unit
+pub async fn Client::setup(Self, Int32, udp? : Bool, record? : Bool) -> @moonrtsp.Negotiated
+pub fn Client::statistics(Self, Int32) -> @moonrtsp.StatsSnapshot raise @moonrtsp.RtspError
 pub async fn Client::teardown(Self) -> Unit
 
 // Type aliases

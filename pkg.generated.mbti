@@ -8,15 +8,15 @@ import {
 }
 
 // Values
-pub fn decode_media(Int, Bool, Bytes) -> MediaEvent raise RtspError
+pub fn decode_media(Int32, Bool, Bytes) -> MediaEvent raise RtspError
 
 pub fn describe(Bytes, String) -> Description raise RtspError
 
-pub fn interleave(Int, Bytes) -> Bytes raise RtspError
+pub fn interleave(Int32, Bytes) -> Bytes raise RtspError
 
 pub fn negotiate(String, Transport) -> Negotiated raise RtspError
 
-pub fn parse_count(String, Int) -> Int raise RtspError
+pub fn parse_count(String, Int32) -> Int32 raise RtspError
 
 pub fn parse_parameters(String) -> Map[String, String] raise RtspError
 
@@ -33,7 +33,7 @@ pub(all) suberror RtspError {
   Invalid(String)
   Limit(String)
   State(String)
-  Remote(Int)
+  Remote(Int32)
   Closed
 } derive(@debug.Debug)
 pub fn RtspError::to_repr(Self) -> @debug.Repr
@@ -49,15 +49,15 @@ pub fn Authenticator::new(Credentials, String) -> Self raise RtspError
 pub struct ChannelMap {
   // private fields
 }
-pub fn ChannelMap::bind(Self, Int, Transport) -> Unit raise RtspError
+pub fn ChannelMap::bind(Self, Int32, Transport) -> Unit raise RtspError
 pub fn ChannelMap::new() -> Self
-pub fn ChannelMap::route(Self, Int, Bytes) -> MediaEvent raise RtspError
+pub fn ChannelMap::route(Self, Int32, Bytes) -> MediaEvent raise RtspError
 
 pub struct Clock {
   // private fields
 }
-pub fn Clock::millis(Self, UInt) -> Int64
-pub fn Clock::new(Int) -> Self raise RtspError
+pub fn Clock::millis(Self, UInt32) -> Int64
+pub fn Clock::new(Int32) -> Self raise RtspError
 
 pub struct Credentials {
   // private fields
@@ -69,8 +69,8 @@ pub struct Decoder {
 }
 pub fn Decoder::feed(Self, Bytes) -> Array[WireEvent] raise RtspError
 pub fn Decoder::finish(Self) -> Unit raise RtspError
-pub fn Decoder::new(max_buffer? : Int) -> Self raise RtspError
-pub fn Decoder::pending(Self) -> Int
+pub fn Decoder::new(max_buffer? : Int32) -> Self raise RtspError
+pub fn Decoder::pending(Self) -> Int32
 pub fn Decoder::reset(Self) -> Unit
 
 pub struct Description {
@@ -78,11 +78,11 @@ pub struct Description {
   tracks : Array[Track]
   raw : String
 }
-pub fn Description::select(Self, Array[Int]) -> Array[Track] raise RtspError
+pub fn Description::select(Self, Array[Int32]) -> Array[Track] raise RtspError
 
 pub struct Endpoint {
   host : String
-  port : Int
+  port : Int32
   path : String
 }
 pub fn Endpoint::hostname(Self) -> String
@@ -90,15 +90,15 @@ pub fn Endpoint::parse(String) -> Self raise RtspError
 pub fn Endpoint::url(Self) -> String
 
 pub struct Frame {
-  timestamp : UInt
+  timestamp : UInt32
   data : Bytes
-  packets : Int
+  packets : Int32
 }
 
 pub struct FrameAssembler {
   // private fields
 }
-pub fn FrameAssembler::new(@rtp.PayloadCodec, max_bytes? : Int, max_packets? : Int) -> Self raise RtspError
+pub fn FrameAssembler::new(@rtp.PayloadCodec, max_bytes? : Int32, max_packets? : Int32) -> Self raise RtspError
 pub fn FrameAssembler::push(Self, @rtp.Packet) -> Frame? raise RtspError
 pub fn FrameAssembler::reset(Self) -> Unit
 
@@ -114,22 +114,22 @@ pub fn Headers::new() -> Self
 pub fn Headers::set(Self, String, String) -> Unit raise RtspError
 
 pub(all) enum MediaEvent {
-  Rtp(Int, @rtp.Packet)
-  Rtcp(Int, Array[@rtcp.Packet])
+  Rtp(Int32, @rtp.Packet)
+  Rtcp(Int32, Array[@rtcp.Packet])
 }
 
 pub struct MediaQueue {
   // private fields
 }
 pub fn MediaQueue::discarded(Self) -> Int64
-pub fn MediaQueue::length(Self) -> Int
-pub fn MediaQueue::new(capacity? : Int) -> Self raise RtspError
+pub fn MediaQueue::length(Self) -> Int32
+pub fn MediaQueue::new(capacity? : Int32) -> Self raise RtspError
 pub fn MediaQueue::pop(Self) -> MediaEvent?
 pub fn MediaQueue::push(Self, MediaEvent) -> Unit
 
 pub struct Negotiated {
   transport : Transport
-  server_ports : (Int, Int)?
+  server_ports : (Int32, Int32)?
   source : String?
   ssrc : String?
 }
@@ -156,12 +156,12 @@ pub(all) enum PlayRange {
 pub fn PlayRange::encode(Self) -> String raise RtspError
 
 pub struct ReconnectPolicy {
-  attempts : Int
-  initial_ms : Int
-  maximum_ms : Int
+  attempts : Int32
+  initial_ms : Int32
+  maximum_ms : Int32
 }
-pub fn ReconnectPolicy::delay(Self, Int) -> Int raise RtspError
-pub fn ReconnectPolicy::new(attempts? : Int, initial_ms? : Int, maximum_ms? : Int) -> Self raise RtspError
+pub fn ReconnectPolicy::delay(Self, Int32) -> Int32 raise RtspError
+pub fn ReconnectPolicy::new(attempts? : Int32, initial_ms? : Int32, maximum_ms? : Int32) -> Self raise RtspError
 
 pub struct Request {
   verb : String
@@ -169,24 +169,24 @@ pub struct Request {
   headers : Headers
   body : Bytes
 }
-pub fn Request::cseq(Self) -> Int raise RtspError
+pub fn Request::cseq(Self) -> Int32 raise RtspError
 pub fn Request::encode(Self) -> Bytes raise RtspError
-pub fn Request::new(String, String, Int, body? : Bytes) -> Self raise RtspError
+pub fn Request::new(String, String, Int32, body? : Bytes) -> Self raise RtspError
 
 pub struct Response {
-  status : Int
+  status : Int32
   reason : String
   headers : Headers
   body : Bytes
 }
-pub fn Response::cseq(Self) -> Int raise RtspError
+pub fn Response::cseq(Self) -> Int32 raise RtspError
 pub fn Response::encode(Self) -> Bytes raise RtspError
-pub fn Response::new(Int, String, Headers, body? : Bytes) -> Self raise RtspError
+pub fn Response::new(Int32, String, Headers, body? : Bytes) -> Self raise RtspError
 
 pub struct RtpInfo {
   url : String
-  sequence : Int?
-  timestamp : UInt?
+  sequence : Int32?
+  timestamp : UInt32?
 }
 
 pub struct Session {
@@ -199,12 +199,12 @@ pub fn Session::info(Self) -> SessionInfo?
 pub fn Session::keepalive_due(Self, Int64) -> Bool
 pub fn Session::new(String, auth? : Authenticator) -> Self raise RtspError
 pub fn Session::phase(Self) -> Phase
-pub fn Session::request(Self, String, uri? : String, body? : Bytes, headers? : Headers, now? : Int64, timeout_ms? : Int) -> Request raise RtspError
-pub fn Session::setup_count(Self) -> Int
+pub fn Session::request(Self, String, uri? : String, body? : Bytes, headers? : Headers, now? : Int64, timeout_ms? : Int32) -> Request raise RtspError
+pub fn Session::setup_count(Self) -> Int32
 
 pub struct SessionInfo {
   id : String
-  timeout_seconds : Int
+  timeout_seconds : Int32
 }
 
 pub struct StatsSnapshot {
@@ -216,7 +216,7 @@ pub struct StatsSnapshot {
 }
 
 pub struct Track {
-  index : Int
+  index : Int32
   kind : String
   control : String
   formats : Array[String]
@@ -232,15 +232,15 @@ pub fn TrackStats::observe(Self, @rtp.Packet) -> Unit
 pub fn TrackStats::snapshot(Self) -> StatsSnapshot
 
 pub(all) enum Transport {
-  Tcp(Int, Int)
-  Udp(Int, Int)
+  Tcp(Int32, Int32)
+  Udp(Int32, Int32)
 }
 pub fn Transport::encode(Self, record? : Bool) -> String raise RtspError
 
 pub(all) enum WireEvent {
   Reply(Response)
   Command(Request)
-  Interleaved(Int, Bytes)
+  Interleaved(Int32, Bytes)
 }
 
 // Type aliases
