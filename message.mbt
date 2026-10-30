@@ -82,3 +82,10 @@ fn request_from_head(start : String, headers : Headers, body : Bytes) -> Request
  ignore(Request::new(r.verb, r.uri, r.cseq(), body~))
  r
 }
+
+///|
+pub fn Response::new(status : Int, reason : String, headers : Headers, body? : Bytes = b"") -> Response raise RtspError {
+ let response={status,reason,headers:headers.copy(),body}
+ ignore(response.encode())
+ response
+}
