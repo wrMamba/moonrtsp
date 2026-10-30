@@ -50,6 +50,6 @@ GitHub 仓库搜索 `RTSP MoonBit` 返回 total_count=0、incomplete_results=fal
 - https://github.com/bluenviron/mediamtx
 - https://www.rfc-editor.org/rfc/rfc2326
 
-搜索依赖当时公开可访问的索引、命名与仓库内容，不能排除未发布、私有或尚未被索引的项目。在记录范围内未发现成熟的 MoonBit RTSP 客户端直接替代。发布前还需按核心行为复核索引与注册表，保留实际结果。
+搜索依赖当时公开可访问的索引、命名与仓库内容，不能排除未发布、私有或尚未被索引的项目。在记录范围内未发现成熟的 MoonBit RTSP 客户端直接替代。最终复核的实际结果记录如下。
 
 最终发布前复核（2026-10-30）：MoonCakes 的 rtsp/gortsplib/live555/rfc7826 四项均返回空结果；GitHub rtsp+language:MoonBit 为 total_count=0、incomplete_results=false；共享注册表重新扫描 RTSP，仅本项目预留项。同名 GitHub 仓库与 MoonCakes 精确版本创建前均为官方 404。结论仍限于可访问和已索引内容。
