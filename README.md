@@ -2,7 +2,7 @@
 
 面向摄像头接入、媒体采集和流媒体测试的 **RTSP 1.0 客户端库与命令行工具**。包含实际 TCP/UDP 网络连接、认证、播放和发布；输出编码 RTP 数据，交给应用保存、转发或解码。
 
-模块：`wrMamba/moonrtsp@0.1.1`。原创协议会话与网络集成实现，MIT 许可。成熟软件能力逐项对照见 [参考与边界](docs/references.md)，查重证据见 [选题记录](docs/competition/duplicate-check.md)。
+模块：`wrMamba/moonrtsp@0.1.2`。原创协议会话与网络集成实现，MIT 许可。成熟软件能力逐项对照见 [参考与边界](docs/references.md)，查重证据见 [选题记录](docs/competition/duplicate-check.md)。
 
 ## 能做什么
 
@@ -22,20 +22,23 @@
 ```sh
 moon new camera-client
 cd camera-client
-moon add wrMamba/moonrtsp@0.1.1
+moon add wrMamba/moonrtsp@0.1.2
+moon add moonbitlang/async@0.22.4
 ```
 
 在调用包的 `moon.pkg` 中加入所需导入：
 
 ```moonbit
 import {
-  "moonbitlang/core/async",
+  "moonbitlang/async",
   "wrMamba/moonrtsp" @rtsp,
   "wrMamba/moonrtsp/net" @net,
 }
 supported_targets = "native+wasm"
 pkgtype(kind: "executable")
 ```
+
+网络消费者的 `async fn main` 必须使用上述 `moonbitlang/async` 运行时；不要改为 `moonbitlang/core/async`，两者的协程上下文不同。
 
 根包为便携核心，支持 wasm-gc / wasm / js / native。`net` 和 CLI 支持 wasm / native；**wasm 使用 moonrun 的宿主 socket 能力**，不是浏览器内直接连摄像头。native 需要平台 C 工具链；Windows 需要 MSVC/SDK。模块默认 wasm。
 

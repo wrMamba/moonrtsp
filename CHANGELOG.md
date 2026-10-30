@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.2
+
+- Use the explicit moonbitlang/async 0.22.4 runtime in the external consumer setup, matching the networking library and CLI. The built-in core/async runtime cannot drive this dependency.
+- Runtime API and behavior unchanged; corrected consumer setup verified with a real socket request.
+
 ## 0.1.1
 
 - Complete the external async consumer package configuration for strict checks.
