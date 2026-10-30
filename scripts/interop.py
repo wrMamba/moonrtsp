@@ -103,15 +103,17 @@ paths:
                         server = subprocess.Popen([str(binary), str(config)], cwd=directory, stdout=log, stderr=log)
                         ready(server, 18554)
                         publisher = subprocess.Popen(command + ["publish-multi", uri, publication, "300"], cwd=ROOT, env=environment, stdout=publisher_log, stderr=subprocess.STDOUT)
+                        # Probe the actual published stream: native stdout redirected
+                        # to a file may stay buffered until the publisher exits.
                         deadline = time.monotonic() + 10
                         while True:
-                            text = (directory / "publisher.log").read_text(encoding="utf-8")
-                            if "recording" in text:
+                            probe = subprocess.run(command + ["inspect", uri], cwd=ROOT, env=environment, capture_output=True, text=True, timeout=10)
+                            if probe.returncode == 0:
+                                inspect = probe.stdout
                                 break
-                            assert publisher.poll() is None, "publisher failed before RECORD: " + text
-                            assert time.monotonic() < deadline, "publisher readiness timeout"
+                            assert publisher.poll() is None, "publisher exited before stream readiness: " + (directory / "publisher.log").read_text(encoding="utf-8")
+                            assert time.monotonic() < deadline, "stream readiness timeout: " + probe.stdout + probe.stderr
                             time.sleep(.05)
-                        inspect = subprocess.run(command + ["inspect", uri], cwd=ROOT, env=environment, capture_output=True, text=True, timeout=10, check=True).stdout
                         assert "track=0 kind=audio" in inspect and "track=1 kind=audio" in inspect
                         for transport in ["tcp", "udp"]:
                             playback = subprocess.run(command + ["play", uri, transport, "8"], cwd=ROOT, env=environment, capture_output=True, text=True, timeout=10, check=True).stdout
