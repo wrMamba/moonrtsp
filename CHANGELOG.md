@@ -1,3 +1,10 @@
+# Changelog
+
+## 0.1.1
+
+- Complete the external async consumer package configuration for strict checks.
+- Runtime API and behavior unchanged from 0.1.0.
+
 # 更新记录
 
 ## 0.1.0
