@@ -1,0 +1,44 @@
+name: verify
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  targets:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [wasm-gc, wasm, js, native]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install official MoonBit toolchain
+        run: |
+          curl --fail --silent --show-error --location https://cli.moonbitlang.com/install/unix.sh -o /tmp/install-moonbit.sh
+          bash /tmp/install-moonbit.sh
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+      - name: Record environment
+        run: |
+          moon version --all
+          cc --version
+          node --version
+      - name: Interfaces and format
+        run: |
+          moon info
+          moon fmt --check
+          git diff --exit-code
+      - name: Strict check test build and consumer
+        run: |
+          moon check --target ${{ matrix.target }} --deny-warn
+          moon test --target ${{ matrix.target }} --deny-warn
+          moon build --target ${{ matrix.target }} --deny-warn
+          moon run examples/protocol --target ${{ matrix.target }} --deny-warn
+      - name: Independent MediaMTX interoperability
+        if: matrix.target == 'wasm' || matrix.target == 'native'
+        run: python3 scripts/interop.py --target ${{ matrix.target }}
+      - name: Production and history audit
+        run: python3 scripts/audit.py
