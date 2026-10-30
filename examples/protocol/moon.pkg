@@ -1,0 +1,5 @@
+import {
+  "wrMamba/moonrtsp" @rtsp,
+}
+
+pkgtype(kind: "executable")
